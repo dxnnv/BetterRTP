@@ -1,11 +1,9 @@
 
-To-Do list for BetterRTP
-
-
+# To-Do list for BetterRTP
 Worlds with spaces:
 - Support for worlds with spaces in their names
 
------DONE-----
+#-----DONE-----
 Add KingdomsX support:
  Wiki: https://github.com/CryptoMorin/KingdomsX/wiki/API
  Plugin: https://www.spigotmc.org/resources/kingdomsx.77670/

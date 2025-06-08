@@ -26,7 +26,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.List;
+import java.util.logging.Level;
 
 public class BetterRTP extends JavaPlugin {
     @Getter private final Permissions perms = new Permissions();
@@ -59,8 +61,7 @@ public class BetterRTP extends JavaPlugin {
         queue.registerEvents(this);
         try {
             new DepPlaceholderAPI().register();
-        } catch (NoClassDefFoundError e) {
-            //No placeholder api :(
+        } catch (NoClassDefFoundError ignored) {
         }
     }
 
@@ -116,6 +117,7 @@ public class BetterRTP extends JavaPlugin {
     }
 
     public static void debug(String str) {
-        getInstance().getLogger().info(str);
+        if (instance.getSettings().isDebug())
+            instance.getLogger().log(Level.FINEST, str);
     }
 }

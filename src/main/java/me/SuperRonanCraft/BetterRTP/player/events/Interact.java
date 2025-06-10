@@ -68,8 +68,8 @@ class Interact {
         String actions = "";
         for (int i = 1; i < signArray.length; i++) {
             String line = signArray[i];
-            if (line != null && !line.equals(""))
-                if (actions.equals(""))
+            if (line != null && !line.isEmpty())
+                if (actions.isEmpty())
                     actions = line;
                 else
                     actions = actions.concat(" " + line);

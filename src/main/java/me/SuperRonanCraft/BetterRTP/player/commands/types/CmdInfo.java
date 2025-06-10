@@ -6,16 +6,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Registry;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.player.commands.RTPCommand;
@@ -55,7 +56,7 @@ public class CmdInfo implements RTPCommand, RTPCommandHelpable {
             else if (args[1].equalsIgnoreCase(CmdInfoSub.POTION_EFFECTS.name()))
                 infoEffects(sendi);
             else if (args[1].equalsIgnoreCase(CmdInfoSub.WORLD.name())) {
-                World world = null;
+                World world;
                 Player player = null;
                 if (args.length > 2) {
                     world = Bukkit.getWorld(args[2]);
@@ -87,8 +88,6 @@ public class CmdInfo implements RTPCommand, RTPCommandHelpable {
                     MessagesCore.NOTONLINE.send(sendi, args.length > 2 ? args[2] : "NULL");
                     return;
                 }
-                if (world == null)
-                    world = player.getWorld();
                 sendInfoWorld(sendi, infoGetWorld(sendi, world, player, null), label, args);
             }
         } else
@@ -140,11 +139,27 @@ public class CmdInfo implements RTPCommand, RTPCommandHelpable {
     //World
     public static void sendInfoWorld(CommandSender sendi, List<String> list, String label, String[] args) { //Send info
         boolean upload = Arrays.asList(args).contains("_UPLOAD_");
-        list.add(0, "&e&m-----&6 BetterRTP &8| Info &e&m-----");
+        list.addFirst("&e&m-----&6 BetterRTP &8| Info &e&m-----");
         list.forEach(str -> list.set(list.indexOf(str), Message.color(str)));
 
         String cmd = "/" + label + " " + String.join(" ", args);
-        if (!upload) {
+        if (upload) {
+            list.addFirst("Command: " + cmd);
+            list.forEach(str -> list.set(list.indexOf(str), ChatColor.stripColor(str)));
+            CompletableFuture.runAsync(() -> {
+                String key = LogUploader.post(list);
+                if (key == null) {
+                    Message.sms(sendi, new ArrayList<>(Collections.singletonList("&cAn error occured attempting to upload log!")), null);
+                } else {
+                    try {
+                        JsonObject json = (JsonObject) JsonParser.parseString(key);
+                        Message.sms(sendi, Arrays.asList(" ", Message.getPrefix(Message_RTP.msg) + "&aLog uploaded! &fView&7: &6https://logs.ronanplugins.com/" + json.get("key")), null);
+                    } catch (JsonParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        } else {
             sendi.sendMessage(list.toArray(new String[0]));
             if (sendi instanceof Player) {
                 TextComponent component = new TextComponent(Message.color("&7- &7Click to upload command log to &flogs.ronanplugins.com"));
@@ -154,23 +169,8 @@ public class CmdInfo implements RTPCommand, RTPCommandHelpable {
             } else {
                 sendi.sendMessage("Execute `" + cmd + " _UPLOAD_`" + " to upload command log to https://logs.ronanplugins.com");
             }
-        } else {
-            list.add(0, "Command: " + cmd);
-            list.forEach(str -> list.set(list.indexOf(str), ChatColor.stripColor(str)));
-            CompletableFuture.runAsync(() -> {
-                String key = LogUploader.post(list);
-                if (key == null) {
-                    Message.sms(sendi, new ArrayList<>(Collections.singletonList("&cAn error occured attempting to upload log!")), null);
-                } else {
-                    try {
-                        JSONObject json = (JSONObject) new JSONParser().parse(key);
-                        Message.sms(sendi, Arrays.asList(" ", Message.getPrefix(Message_RTP.msg) + "&aLog uploaded! &fView&7: &6https://logs.ronanplugins.com/" + json.get("key")), null);
-                    } catch (ParseException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            });
         }
+
     }
 
     private void infoWorld(CommandSender sendi, String label, String[] args) { //All worlds
@@ -220,43 +220,34 @@ public class CmdInfo implements RTPCommand, RTPCommandHelpable {
 
     //Janky, but it works
     private static String getInfo(WorldPlayer worldPlayer, WorldDefault worldDefault, String type) {
-        switch (type) {
-            case "centerx":
-                return worldPlayer.getUseWorldborder() || worldPlayer.getCenterX() == worldDefault.getCenterX() ? worldPlayer.getUseWorldborder() ? " &8(worldborder)" : " &8(default)" : "";
-            case "centerz":
-                return worldPlayer.getUseWorldborder() || worldPlayer.getCenterZ() == worldDefault.getCenterZ() ? worldPlayer.getUseWorldborder() ? " &8(worldborder)" : " &8(default)" : "";
-            case "maxrad":
-                return worldPlayer.getUseWorldborder() || worldPlayer.getMaxRadius() == worldDefault.getMaxRadius() ?
-                        worldPlayer.getUseWorldborder() ?
-                        worldPlayer.getMaxRadius() >= worldPlayer.getWorld().getWorldBorder().getSize() ?
-                                " &8(worldborder)" : " &8(custom)" : " &8(default)" : "";
-            case "minrad":
-                return worldPlayer.getMinRadius() == worldDefault.getMinRadius() ? " &8(default)" : "";
-            case "price":
-                return worldPlayer.getPrice() == worldDefault.getPrice() ? " &8(default)" : "";
-            case "shape":
-                return worldPlayer.getShape() == worldDefault.getShape() ? " &8(default)" : "";
-            case "setup":
-                return worldPlayer.setup_type == RTP_SETUP_TYPE.LOCATION ? " &7(" + worldPlayer.setup_name + ")" : "";
-            case "cooldown":
-                return worldPlayer.getPlayer() != null ? PermissionNode.BYPASS_COOLDOWN.check(worldPlayer.getPlayer()) ? " &8(bypassing)" : "" : " &cN/A";
-        }
-        return "";
+        return switch (type) {
+            case "centerx" -> worldPlayer.getUseWorldborder() || worldPlayer.getCenterX() == worldDefault.getCenterX() ? worldPlayer.getUseWorldborder() ? " &8(worldborder)" : " &8(default)" : "";
+            case "centerz" -> worldPlayer.getUseWorldborder() || worldPlayer.getCenterZ() == worldDefault.getCenterZ() ? worldPlayer.getUseWorldborder() ? " &8(worldborder)" : " &8(default)" : "";
+            case "maxrad" -> worldPlayer.getUseWorldborder() || worldPlayer.getMaxRadius() == worldDefault.getMaxRadius() ?
+                    worldPlayer.getUseWorldborder() ?
+                            worldPlayer.getMaxRadius() >= worldPlayer.getWorld().getWorldBorder().getSize() ?
+                                    " &8(worldborder)" : " &8(custom)" : " &8(default)" : "";
+            case "minrad" -> worldPlayer.getMinRadius() == worldDefault.getMinRadius() ? " &8(default)" : "";
+            case "price" -> worldPlayer.getPrice() == worldDefault.getPrice() ? " &8(default)" : "";
+            case "shape" -> worldPlayer.getShape() == worldDefault.getShape() ? " &8(default)" : "";
+            case "setup" -> worldPlayer.setup_type == RTP_SETUP_TYPE.LOCATION ? " &7(" + worldPlayer.setup_name + ")" : "";
+            case "cooldown" -> worldPlayer.getPlayer() != null ? PermissionNode.BYPASS_COOLDOWN.check(worldPlayer.getPlayer()) ? " &8(bypassing)" : "" : " &cN/A";
+            default -> "";
+        };
     }
 
     //Effects
     private void infoEffects(CommandSender sendi) {
         List<String> info = new ArrayList<>();
 
-        for (PotionEffectType effect : PotionEffectType.values()) {
-            if (info.isEmpty() || info.size() % 2 == 0) {
-                info.add("&7" + effect.getName() + "&r");
-            } else
-                info.add("&f" + effect.getName() + "&r");
+        for (PotionEffectType effect : Registry.EFFECT) {
+            if (info.isEmpty() || info.size() % 2 == 0)
+                info.add("&7" + effect.getKey() + "&r");
+            else
+                info.add("&f" + effect.getKey() + "&r");
         }
 
-        info.forEach(str ->
-                info.set(info.indexOf(str), Message.color(str)));
+        info.forEach(str -> info.set(info.indexOf(str), Message.color(str)));
         sendi.sendMessage(info.toString());
     }
 

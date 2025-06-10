@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.file;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -31,6 +32,7 @@ public class FileOther {
 
         private final String fileName;
         private final YamlConfiguration config = new YamlConfiguration();
+        @Getter
         private final File file;
 
         FILETYPE(String str) {
@@ -47,10 +49,6 @@ public class FileOther {
         @Override
         public YamlConfiguration getConfig() {
             return config;
-        }
-
-        public File getFile() {
-            return file;
         }
 
         @Override

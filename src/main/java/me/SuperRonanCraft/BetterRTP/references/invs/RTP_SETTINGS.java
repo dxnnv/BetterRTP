@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.invs;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.references.file.FileOther.FILETYPE;
 
@@ -7,10 +8,13 @@ public enum RTP_SETTINGS {
     BLACKLIST(   SETTINGS_TYPE.BOOLEAN, FILETYPE.CONFIG, "Template.Enabled",
             new Object[]{true, "Templates", "&7Toggle Templates system", "paper"});
 
+    @Getter
     SETTINGS_TYPE type;
+    @Getter
     FILETYPE filetype;
     String path;
     String[] condition = null;
+    @Getter
     Object[] info; // = new Object[]{false}; //ENABLED, NAME, DESCRIPTION, ITEM
 
     RTP_SETTINGS(SETTINGS_TYPE type, FILETYPE filetype, String path, Object[] info) {
@@ -32,8 +36,6 @@ public enum RTP_SETTINGS {
     void setValue(Object value) {
         BetterRTP.getInstance().getFiles().getType(filetype).setValue(path, value);
     }
-
-    public Object[] getInfo() {return info;}
 
     public Object getValue() {
         String path = this.path;
@@ -58,11 +60,4 @@ public enum RTP_SETTINGS {
         return null;
     }
 
-    public SETTINGS_TYPE getType() {
-        return type;
-    }
-
-    public FILETYPE getFiletype() {
-        return filetype;
-    }
 }

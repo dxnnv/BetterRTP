@@ -88,15 +88,10 @@ public class WorldPermissionGroup implements RTPWorld, RTPWorld_Defaulted {
                 }
             }
             if (FileOther.FILETYPE.ECO.getBoolean("Economy.Enabled"))
-                if (field.equalsIgnoreCase("Price")) {
-                    if (hash3.getValue().getClass() == Integer.class) {
-                        this.price = Integer.parseInt(hash3.getValue().toString());
-                        BetterRTP.debug("- - Price: " + price);
-                    }
-                    //else
-                    // price = worldDefault.getPrice(world);
-                } //else
-            //price = worldDefault.getPrice(world);
+                if (field.equalsIgnoreCase("Price") && hash3.getValue().getClass() == Integer.class) {
+                    this.price = Integer.parseInt(hash3.getValue().toString());
+                    BetterRTP.debug("- - Price: " + price);
+                } // else price = worldDefault.getPrice(world);
             if (field.equalsIgnoreCase("Shape")) {
                 if (hash3.getValue().getClass() == String.class) {
                     try {

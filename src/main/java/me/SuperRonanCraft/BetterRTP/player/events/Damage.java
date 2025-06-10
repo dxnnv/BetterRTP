@@ -16,8 +16,7 @@ public class Damage {
 
     static void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof Player)) return;
-        Player player = (Player) entity;
+        if (!(entity instanceof Player player)) return;
 
         if (!canCancel(event.getCause())) return;
         if (!isInInvincibleMode(player)) return;

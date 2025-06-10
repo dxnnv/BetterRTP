@@ -51,16 +51,16 @@ public class RTPPlayer {
             }
             AsyncHandler.async(() -> {
                 Location loc;
-                if (event.getLocation() != null) // && WorldPlayer.checkIsValid(event.getLocation(), pWorld))
-                    loc = event.getLocation();
-                else {
+                if (event.getLocation() == null) { // && WorldPlayer.checkIsValid(event.getLocation(), pWorld))
                     QueueData queueData = QueueHandler.getRandomAsync(worldPlayer);
                     //BetterRTP.getInstance().getLogger().warning("Center x " + worldPlayer.getCenterX());
                     if (queueData != null)
                         loc = queueData.getLocation();
                     else
                         loc = RandomLocation.generateLocation(worldPlayer);
-                }
+                } else
+                    loc = event.getLocation();
+
                 attempts++; //Add an attempt
                 //Load chunk and find out if safe location (asynchronously)
                 AsyncHandler.sync(() -> {

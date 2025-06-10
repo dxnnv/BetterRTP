@@ -17,8 +17,7 @@ public class DepEssentials {
             if (user == null)
                 return;
             user.setLastLocation(location);
-        } catch (ClassCastException e) {
-            //Something wrong happened, idk why this would break...
+        } catch (ClassCastException ignored) {
         }
     }
 

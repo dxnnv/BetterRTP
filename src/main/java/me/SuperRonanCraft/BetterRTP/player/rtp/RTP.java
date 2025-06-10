@@ -88,10 +88,8 @@ public class RTP {
         // Delaying? Else, just go
         if (pWorld.getPlayerInfo().applyDelay && HelperRTP_Check.applyDelay(pWorld.getPlayer())) {
             new RTPDelay(sendi, rtpPlayer, delayTime, cancelOnMove, cancelOnDamage);
-        } else {
-            if (!teleport.beforeTeleportInstant(sendi, p))
-                rtpPlayer.randomlyTeleport(sendi);
-        }
+        } else if (!teleport.beforeTeleportInstant(sendi, p))
+            rtpPlayer.randomlyTeleport(sendi);
     }
 
     private BetterRTP getPl() {

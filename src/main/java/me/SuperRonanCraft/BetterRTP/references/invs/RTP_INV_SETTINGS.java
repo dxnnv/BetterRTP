@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.invs;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.references.invs.enums.RTPInventory;
 import me.SuperRonanCraft.BetterRTP.references.invs.types.RTPInvBlacklist;
 import me.SuperRonanCraft.BetterRTP.references.invs.types.RTPInvCoordinates;
@@ -12,16 +13,13 @@ public enum RTP_INV_SETTINGS {
     COORDINATES(new RTPInvCoordinates(), true),
     WORLDS(new RTPInvWorlds(), false);
 
+    @Getter
     private RTPInventory inv;
     private boolean showInMain;
 
     RTP_INV_SETTINGS(RTPInventory inv, boolean showInMain) {
         this.inv = inv;
         this.showInMain = showInMain;
-    }
-
-    public RTPInventory getInv() {
-        return inv;
     }
 
     public Boolean getShowMain() {

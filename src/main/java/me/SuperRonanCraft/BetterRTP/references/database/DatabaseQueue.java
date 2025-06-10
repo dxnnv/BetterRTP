@@ -90,7 +90,7 @@ public class DatabaseQueue extends SQLite {
         try {
             conn = getSQLConnection();
             //ps = conn.prepareStatement("SELECT * FROM " + tables.get(0) + " WHERE ? BETWEEN ? AND ? AND ? BETWEEN ? AND ?");
-            ps = conn.prepareStatement("SELECT * FROM " + tables.get(0) + " WHERE "
+            ps = conn.prepareStatement("SELECT * FROM " + tables.getFirst() + " WHERE "
                     + COLUMNS.WORLD.name + " = '" + range.getWorld().getName() + "' AND "
                     + COLUMNS.X.name + " BETWEEN " + range.getXLow() + " AND " + range.getXHigh()
                     + " AND " + COLUMNS.Z.name + " BETWEEN " + range.getZLow() + " AND " + range.getZHigh()
@@ -128,19 +128,19 @@ public class DatabaseQueue extends SQLite {
     //Set a queue to save
     public QueueData addQueue(Location loc) {
         String pre = "INSERT INTO ";
-        String sql = pre + tables.get(0) + " ("
+        String sql = pre + tables.getFirst() + " ("
                 + COLUMNS.X.name + ", "
                 + COLUMNS.Z.name + ", "
                 + COLUMNS.WORLD.name + ", "
                 + COLUMNS.GENERATED.name + " "
                 //+ COLUMNS.USES.name + " "
                 + ") VALUES(?, ?, ?, ?)";
-        List<Object> params = new ArrayList<Object>() {{
-                add(loc.getBlockX());
-                add(loc.getBlockZ());
-                add(loc.getWorld().getName());
-                add(System.currentTimeMillis());
-                //add(data.getUses());
+        List<Object> params = new ArrayList<>() {{
+            add(loc.getBlockX());
+            add(loc.getBlockZ());
+            add(loc.getWorld().getName());
+            add(System.currentTimeMillis());
+            //add(data.getUses());
         }};
         //return sqlUpdate(sql, params);
         int database_id = createQueue(sql, params);
@@ -156,7 +156,7 @@ public class DatabaseQueue extends SQLite {
         int count = 0;
         try {
             conn = getSQLConnection();
-            ps = conn.prepareStatement("SELECT * FROM " + tables.get(0));
+            ps = conn.prepareStatement("SELECT * FROM " + tables.getFirst());
 
             rs = ps.executeQuery();
             count = rs.getFetchSize();
@@ -195,12 +195,12 @@ public class DatabaseQueue extends SQLite {
     }
 
     public boolean removeLocation(Location loc) {
-        String sql = "DELETE FROM " + tables.get(0) + " WHERE "
+        String sql = "DELETE FROM " + tables.getFirst() + " WHERE "
                 + COLUMNS.X.name + " = ? AND "
                 + COLUMNS.Z.name + " = ? AND "
                 + COLUMNS.WORLD.name + " = ?"
                 ;
-        List<Object> params = new ArrayList<Object>() {{
+        List<Object> params = new ArrayList<>() {{
             add(loc.getBlockX());
             add(loc.getBlockZ());
             add(loc.getWorld().getName());
@@ -208,11 +208,12 @@ public class DatabaseQueue extends SQLite {
         return sqlUpdate(sql, params);
     }
 
+    @Getter
     public static class QueueRangeData {
 
-        @Getter int xLow, xHigh;
-        @Getter int zLow, zHigh;
-        @Getter World world;
+        int xLow, xHigh;
+        int zLow, zHigh;
+        World world;
 
         public QueueRangeData(RTPWorld rtpWorld) {
             this.xLow = rtpWorld.getCenterX() - rtpWorld.getMaxRadius();

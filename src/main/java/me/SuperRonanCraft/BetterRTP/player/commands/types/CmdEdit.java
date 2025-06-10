@@ -251,16 +251,14 @@ public class CmdEdit implements RTPCommand, RTPCommandHelpable { //Edit a worlds
         } else if (args.length == 6) {
             for (RTP_CMD_EDIT cmd : RTP_CMD_EDIT.values())
                 if (cmd.name().equalsIgnoreCase(args[1]))
-                    switch (cmd) {
-                        case PERMISSION_GROUP:
-                            if (args[4].equalsIgnoreCase(RTP_CMD_EDIT_SUB.CENTER_X.name()))
-                                list.add(String.valueOf(((Player) sendi).getLocation().getBlockX()));
-                            else if (args[4].equalsIgnoreCase(RTP_CMD_EDIT_SUB.CENTER_Z.name()))
-                                list.add(String.valueOf(((Player) sendi).getLocation().getBlockZ()));
-                            else if (args[4].equalsIgnoreCase(RTP_CMD_EDIT_SUB.SHAPE.name()))
-                                for (RTP_SHAPE shape : RTP_SHAPE.values())
-                                    list.add(shape.name().toLowerCase());
-                            break;
+                    if (cmd == RTP_CMD_EDIT.PERMISSION_GROUP) {
+                        if (args[4].equalsIgnoreCase(RTP_CMD_EDIT_SUB.CENTER_X.name()))
+                            list.add(String.valueOf(((Player) sendi).getLocation().getBlockX()));
+                        else if (args[4].equalsIgnoreCase(RTP_CMD_EDIT_SUB.CENTER_Z.name()))
+                            list.add(String.valueOf(((Player) sendi).getLocation().getBlockZ()));
+                        else if (args[4].equalsIgnoreCase(RTP_CMD_EDIT_SUB.SHAPE.name()))
+                            for (RTP_SHAPE shape : RTP_SHAPE.values())
+                                list.add(shape.name().toLowerCase());
                     }
         }
         return list;

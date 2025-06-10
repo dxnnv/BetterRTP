@@ -37,12 +37,9 @@ public class RTPInvBlacklist extends RTPInventory {
         int slot = e.getSlot();
         for (RTP_INV_ITEMS type : RTP_INV_ITEMS.values()) {
             if (type.slot != -1) {
-                switch (type) {
-                    case BACK:
-                        if (slot == e.getInventory().getSize() - 9 + type.slot)
-                            BetterRTP.getInstance().getInvs().getInv(RTP_INV_SETTINGS.MAIN).show((Player) e.getWhoClicked());
-                    default:
-                        break;
+                if (type == RTP_INV_ITEMS.BACK) {
+                    if (slot == e.getInventory().getSize() - 9 + type.slot)
+                        BetterRTP.getInstance().getInvs().getInv(RTP_INV_SETTINGS.MAIN).show((Player) e.getWhoClicked());
                 }
             }
         }

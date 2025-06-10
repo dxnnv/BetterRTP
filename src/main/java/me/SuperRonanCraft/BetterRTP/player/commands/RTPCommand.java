@@ -23,5 +23,5 @@ public interface RTPCommand {
 
     default boolean enabled() {
         return true;
-    };
+    }
 }

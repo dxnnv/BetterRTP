@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.database;
 
+import lombok.Getter;
 import lombok.NonNull;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.versions.AsyncHandler;
@@ -15,6 +16,7 @@ public abstract class SQLite {
 
     private static final String db_file_name = "database";
     List<String> tables;
+    @Getter
     private boolean loaded;
 
     public String addMissingColumns = "ALTER TABLE %table% ADD COLUMN %column% %type%";
@@ -117,33 +119,30 @@ public abstract class SQLite {
     }
 
     private Enum<?>[] getColumns(DATABASE_TYPE type) {
-        switch (type) {
-            case CHUNK_DATA: return DatabaseChunkData.COLUMNS.values();
-            case PLAYERS: return DatabasePlayers.COLUMNS.values();
-            case QUEUE: return DatabaseQueue.COLUMNS.values();
-            case COOLDOWN:
-            default: return DatabaseCooldowns.COLUMNS.values();
-        }
+        return switch (type) {
+            case CHUNK_DATA -> DatabaseChunkData.COLUMNS.values();
+            case PLAYERS -> DatabasePlayers.COLUMNS.values();
+            case QUEUE -> DatabaseQueue.COLUMNS.values();
+            default -> DatabaseCooldowns.COLUMNS.values();
+        };
     }
 
     private String getColumnName(DATABASE_TYPE type, Enum<?> column) {
-        switch (type) {
-            case CHUNK_DATA: return ((DatabaseChunkData.COLUMNS) column).name;
-            case PLAYERS: return ((DatabasePlayers.COLUMNS) column).name;
-            case QUEUE: return ((DatabaseQueue.COLUMNS) column).name;
-            case COOLDOWN:
-            default: return ((DatabaseCooldowns.COLUMNS) column).name;
-        }
+        return switch (type) {
+            case CHUNK_DATA -> ((DatabaseChunkData.COLUMNS) column).name;
+            case PLAYERS -> ((DatabasePlayers.COLUMNS) column).name;
+            case QUEUE -> ((DatabaseQueue.COLUMNS) column).name;
+            default -> ((DatabaseCooldowns.COLUMNS) column).name;
+        };
     }
 
     private String getColumnType(DATABASE_TYPE type, Enum<?> column) {
-        switch (type) {
-            case CHUNK_DATA: return ((DatabaseChunkData.COLUMNS) column).type;
-            case PLAYERS: return ((DatabasePlayers.COLUMNS) column).type;
-            case QUEUE: return ((DatabaseQueue.COLUMNS) column).type;
-            case COOLDOWN:
-            default: return ((DatabaseCooldowns.COLUMNS) column).type;
-        }
+        return switch (type) {
+            case CHUNK_DATA -> ((DatabaseChunkData.COLUMNS) column).type;
+            case PLAYERS -> ((DatabasePlayers.COLUMNS) column).type;
+            case QUEUE -> ((DatabaseQueue.COLUMNS) column).type;
+            default -> ((DatabaseCooldowns.COLUMNS) column).type;
+        };
     }
 
     //Processing
@@ -211,7 +210,7 @@ public abstract class SQLite {
         ResultSet rs = null;
         try {
             conn = getSQLConnection();
-            ps = conn.prepareStatement("SELECT * FROM " + tables.get(0) + " WHERE " + getColumnName(type, getColumns(type)[0]) + " = 0");
+            ps = conn.prepareStatement("SELECT * FROM " + tables.getFirst() + " WHERE " + getColumnName(type, getColumns(type)[0]) + " = 0");
 
             rs = ps.executeQuery();
         } catch (SQLException ex) {
@@ -229,10 +228,6 @@ public abstract class SQLite {
         } catch (SQLException ex) {
             Error.close(BetterRTP.getInstance(), ex);
         }
-    }
-
-    public boolean isLoaded() {
-        return loaded;
     }
 
     public enum DATABASE_TYPE {

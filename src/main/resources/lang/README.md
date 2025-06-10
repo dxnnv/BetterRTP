@@ -1,4 +1,4 @@
-<p align="center">
+<p>
   <b><a>Welcome to BetterRTP's language files!</a></b>
 </p>
 
@@ -8,7 +8,7 @@ The wiki is available [here](https://github.com/SuperRonanCraft/BetterRTP/wiki)!
 ## Want to Contribute translating?  
 Fork one of the language files above and help translate!
     
-<p align="center">
+<p>
   <b>Chat with us on Discord</b><br/>
   <a href="https://discord.gg/8Kt4wKm"><img src="https://img.shields.io/discord/182633513474850818.svg?longCache=true&style=flat-square&label=Discord" alt="Discord" /></a><br/>
   <b>Have a Suggestion? Make an issue!</b><br/>

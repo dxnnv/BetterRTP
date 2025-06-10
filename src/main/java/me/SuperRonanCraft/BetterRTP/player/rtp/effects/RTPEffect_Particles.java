@@ -4,9 +4,9 @@ import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.references.file.FileOther;
 import me.SuperRonanCraft.BetterRTP.versions.AsyncHandler;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import xyz.xenondevs.particle.ParticleEffect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ import java.util.List;
 public class RTPEffect_Particles {
 
     private boolean enabled;
-    private final List<ParticleEffect> effects = new ArrayList<>();
+    private final List<Particle> effects = new ArrayList<>();
     private String shape;
     private final int precision = 16;
 
@@ -48,11 +48,11 @@ public class RTPEffect_Particles {
         try {
             for (String type : types) {
                 typeTrying = type;
-                effects.add(ParticleEffect.valueOf(type.toUpperCase()));
+                effects.add(Particle.valueOf(type.toUpperCase()));
             }
         } catch (IllegalArgumentException | NullPointerException e) {
             effects.clear();
-            effects.add(ParticleEffect.ASH);
+            effects.add(Particle.ASH);
             getPl().getLogger().severe("The particle '" + typeTrying + "' doesn't exist! Default particle enabled... " +
                     "Try using '/rtp info particles' to get a list of available particles");
         } catch (ExceptionInInitializerError | NoClassDefFoundError e2) {
@@ -71,7 +71,7 @@ public class RTPEffect_Particles {
     public void display(Player p) {
         if (!enabled) return;
         AsyncHandler.async(() -> {
-            try { //Incase the library errors out
+            try { //In case the library errors out
                 switch (shape) {
                     case "TELEPORT":
                         partTeleport(p);
@@ -79,8 +79,8 @@ public class RTPEffect_Particles {
                     case "EXPLODE":
                         partExplosion(p);
                         break;
-                    default: //Super redundant, but... just future proofing
                     case "SCAN":
+                    default: //Super redundant, but... just future proofing
                         partScan(p);
                         break;
                 }
@@ -94,8 +94,8 @@ public class RTPEffect_Particles {
         Location loc = p.getLocation().add(new Vector(0, 1.75, 0));
         for (int index = 1; index < precision; index++) {
             Vector vec = getVecCircle(index);
-            for (ParticleEffect effect : effects) {
-                effect.display(loc.clone().add(vec), new Vector(0, -0.125, 0), .15f, 0, null, p);
+            for (Particle effect : effects) {
+                ParticleBuilder.(loc.clone().add(vec), new Vector(0, -0.125, 0), .15f, 0, null, p);
             }
         }
     }
@@ -123,8 +123,8 @@ public class RTPEffect_Particles {
     }
 
     private Vector getVecCircle(int index) {
-        double p1 = (index * Math.PI) / (precision / 2);
-        double p2 = (index - 1) * Math.PI / (precision / 2);
+        double p1 = (index * Math.PI) / ((double) precision / 2);
+        double p2 = (index - 1) * Math.PI / ((double) precision / 2);
         //Positions
         int radius = 3;
         double x1 = Math.cos(p1) * radius;

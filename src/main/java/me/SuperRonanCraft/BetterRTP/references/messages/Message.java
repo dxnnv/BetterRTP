@@ -81,12 +81,11 @@ public interface Message {
             return str;
         for (int i = 0; i < str.size(); i++) {
             String s = placeholder(p, str.get(i), info);
-            if (s != null)
-                str.set(i, s);
-            else {
+            if (s == null) {
                 str.remove(i);
                 i--;
-            }
+            } else
+                str.set(i, s);
         }
         //str.forEach(s -> str.set(str.indexOf(s), placeholder(p, s, info)));
         return str;
@@ -131,7 +130,7 @@ public interface Message {
             String replaceSharp = hexCode.replace('#', 'x');
 
             char[] ch = replaceSharp.toCharArray();
-            StringBuilder builder = new StringBuilder("");
+            StringBuilder builder = new StringBuilder();
             for (char c : ch) {
                 builder.append("&").append(c);
             }

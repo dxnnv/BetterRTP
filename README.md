@@ -1,4 +1,4 @@
-<p align="center">
+<p>
   <b><a>Welcome to BetterRTP's repository!</a></b>
 </p>
 
@@ -22,7 +22,7 @@ The file will be in the Target file.
 ## Where's the Wiki?  
 The wiki is available [here](../../wiki)!
     
-<p align="center">
+<p>
   <b>Chat with us on Discord</b><br/>
   <a href="https://discord.gg/8Kt4wKm"><img src="https://img.shields.io/discord/182633513474850818.svg?longCache=true&style=flat-square&label=Discord" alt="Discord" /></a><br/>
   <b>Have a Suggestion? Make an issue!</b><br/>

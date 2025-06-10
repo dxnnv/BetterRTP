@@ -3,9 +3,11 @@ package me.SuperRonanCraft.BetterRTP.player.rtp;
 import lombok.Getter;
 import lombok.Setter;
 
+@Setter
+@Getter
 public class RTP_PlayerInfo {
 
-    @Getter @Setter boolean
+    boolean
             applyDelay,
             applyCooldown,
             checkCooldown,
@@ -37,7 +39,7 @@ public class RTP_PlayerInfo {
     }
 
     public enum RTP_PLAYERINFO_FLAG {
-        NODELAY, NOCOOLDOWN, IGNORECOOLDOWN, IGNOREMONEY, IGNOREHUNGER;
+        NODELAY, NOCOOLDOWN, IGNORECOOLDOWN, IGNOREMONEY, IGNOREHUNGER
     }
 
 }

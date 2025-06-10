@@ -28,9 +28,11 @@ public class SoftDepends {
 
 
 
+    @Setter
+    @Getter
     static public class RegionPlugin {
-        @Getter @Setter private boolean respecting;
-        @Getter @Setter private boolean enabled;
+        private boolean respecting;
+        private boolean enabled;
     }
 
     private void debug(String str) {

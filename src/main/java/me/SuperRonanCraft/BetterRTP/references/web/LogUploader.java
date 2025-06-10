@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class LogUploader {
@@ -21,20 +22,7 @@ public class LogUploader {
     @Nullable
    public static String post(List<String> requestBody) {
         try {
-            URL url = new URL(UPLOAD_URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "text/plain");
-            connection.setDoOutput(true);
-
-            //String requestBody = "This is the raw body of text.";
-
-            try (OutputStream outputStream = connection.getOutputStream()) {
-                for (String str : requestBody) {
-                    byte[] input = (str + System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
-                    outputStream.write(input, 0, input.length);
-                }
-            }
+            HttpURLConnection connection = getHttpURLConnection(requestBody);
 
             StringBuilder response = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -50,25 +38,29 @@ public class LogUploader {
         }
     }
 
+    private static @NotNull HttpURLConnection getHttpURLConnection(List<String> requestBody) throws IOException {
+        URL url = new URL(UPLOAD_URL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "text/plain");
+        connection.setDoOutput(true);
+
+        //String requestBody = "This is the raw body of text.";
+
+        try (OutputStream outputStream = connection.getOutputStream()) {
+            for (String str : requestBody) {
+                byte[] input = (str + System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
+                outputStream.write(input, 0, input.length);
+            }
+        }
+        return connection;
+    }
+
     @Nullable
     public static String post(File file) {
         // Create the connection to the server
         try {
-            URL url = new URL(UPLOAD_URL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "text/yaml");
-            connection.setDoOutput(true);
-
-            try (OutputStream outputStream = connection.getOutputStream()) {
-                Scanner scan = new Scanner(file);
-                while(scan.hasNextLine()){
-                    String str = scan.nextLine();
-                    byte[] input = (str + System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
-                    outputStream.write(input, 0, input.length);
-                }
-                scan.close();
-            }
+            HttpURLConnection connection = getHttpURLConnection(file);
 
             StringBuilder response = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -85,4 +77,24 @@ public class LogUploader {
         }
         //getLogger().log(Level.INFO, "Response: " + response.toString());
     }
+
+    private static @NotNull HttpURLConnection getHttpURLConnection(File file) throws IOException {
+        URL url = new URL(UPLOAD_URL);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "text/yaml");
+        connection.setDoOutput(true);
+
+        try (OutputStream outputStream = connection.getOutputStream()) {
+            Scanner scan = new Scanner(file);
+            while(scan.hasNextLine()){
+                String str = scan.nextLine();
+                byte[] input = (str + System.lineSeparator()).getBytes(StandardCharsets.UTF_8);
+                outputStream.write(input, 0, input.length);
+            }
+            scan.close();
+        }
+        return connection;
+    }
+
 }

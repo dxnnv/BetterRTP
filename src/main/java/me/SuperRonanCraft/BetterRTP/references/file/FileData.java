@@ -80,19 +80,11 @@ public interface FileData {
         getConfig().set(path, value);
     }
 
-    //PROCCESSING
+    //PROCESSING
     default void load() {
         YamlConfiguration config = getConfig();
         File file = getFile();
-        if (!getFile().exists()) {
-            plugin().saveResource(fileName(), false);
-            try {
-                config.load(file);
-            } catch (Exception e) {
-                plugin().getLogger().info("File " + fileName() + " was unable to load!");
-                e.printStackTrace();
-            }
-        } else {
+        if (getFile().exists()) {
             try {
                 config.load(file);
                 final InputStream in = plugin().getResource(fileName().replace(File.separator, "/"));
@@ -101,10 +93,18 @@ public interface FileData {
                     config.options().copyDefaults(true);
                     in.close();
                 } else {
-                    System.out.println("Input file was nulled " + fileName());
+                    plugin().getLogger().severe("Input file was nulled " + fileName());
                 }
                 config.save(file);
             } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            plugin().saveResource(fileName(), false);
+            try {
+                config.load(file);
+            } catch (Exception e) {
+                plugin().getLogger().info("File " + fileName() + " was unable to load!");
                 e.printStackTrace();
             }
         }

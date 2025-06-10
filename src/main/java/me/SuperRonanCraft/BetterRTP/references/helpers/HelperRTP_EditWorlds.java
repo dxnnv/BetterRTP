@@ -130,8 +130,6 @@ public class HelperRTP_EditWorlds {
             map2.put(world, values);
             map.add(map2);
         }*/
-        //if (!found)
-        //    return;
 
         config.set(path, map);
 
@@ -176,7 +174,7 @@ public class HelperRTP_EditWorlds {
     }
 
     public static void editWorldtype(CommandSender sendi, String world, String val) {
-        //sendi.sendMessage("Editting worldtype for world " + world + " to " + val);
+        //sendi.sendMessage("Editing worldtype for world " + world + " to " + val);
         WORLD_TYPE type;
         try {
             type = WORLD_TYPE.valueOf(val.toUpperCase());
@@ -231,13 +229,14 @@ public class HelperRTP_EditWorlds {
         }
         for (Map<?, ?> o : removeList)
             world_map.remove(o);
-        if (!val.equals("REMOVE_OVERRIDE")) {
+        if (val.equals("REMOVE_OVERRIDE")) {
+            val = "(removed override)";
+        } else {
             Map<String, String> newIndex = new HashMap<>();
             newIndex.put(world, val);
             world_map.add(newIndex);
-        } else {
-            val = "(removed override)";
         }
+
         config.set("Overrides", world_map);
 
         try {

@@ -1,6 +1,7 @@
 package me.SuperRonanCraft.BetterRTP.references.rtpinfo.worlds;
 
 import lombok.Getter;
+import lombok.Setter;
 import me.SuperRonanCraft.BetterRTP.player.commands.RTP_SETUP_TYPE;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.player.rtp.RTPSetupInformation;
@@ -19,8 +20,11 @@ import java.util.*;
 public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
     private boolean useWorldborder;
     private boolean RTPOnDeath;
+    @Setter
     private int CenterX, CenterZ, maxRad, minRad, price, min_y, max_y;
     private long cooldown;
+    //
+    @Setter
     private List<String> Biomes;
     @Getter private final Player player;
     @Getter private final CommandSender sendi;
@@ -28,7 +32,9 @@ public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
     @Getter private final RTP_TYPE rtp_type;
     private final World world;
     private WORLD_TYPE world_type;
+    @Getter
     public WorldPermissionGroup config = null;
+    @Setter
     private RTP_SHAPE shape;
     public RTP_SETUP_TYPE setup_type = RTP_SETUP_TYPE.DEFAULT;
     public String setup_name;
@@ -54,10 +60,10 @@ public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
         setUseWorldBorder(world.getUseWorldborder());
         setRTPOnDeath(world.getRTPOnDeath());
 
-        //BetterRTP.getInstance().getLogger().info("WorldPlayer Center x: " + CenterX);
+        BetterRTP.debug("WorldPlayer Center x: " + CenterX);
         setCenterX(world.getCenterX());
-        //BetterRTP.getInstance().getLogger().info("set to " + world.getCenterX());
-        //BetterRTP.getInstance().getLogger().info("is now " + CenterX);
+        BetterRTP.debug("set to " + world.getCenterX());
+        BetterRTP.debug("is now " + CenterX);
         setCenterZ(world.getCenterZ());
         setMaxRadius(world.getMaxRadius());
         setMinRadius(world.getMinRadius());
@@ -171,11 +177,6 @@ public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
     }
 
     @Override
-    public void setCenterX(int x) {
-        CenterX = x;
-    }
-
-    @Override
     public void setCenterZ(int z) {
         CenterZ = z;
     }
@@ -189,15 +190,6 @@ public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
         minRad = min;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    //
-    public void setBiomes(List<String> biomes) {
-        this.Biomes = biomes;
-    }
-
     @Override
     public void setWorld(World value) {
         //Can't override this one buddy
@@ -206,10 +198,6 @@ public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
     //Custom World type
     public void setWorldtype(WORLD_TYPE type) {
         this.world_type = type;
-    }
-
-    public void setShape(RTP_SHAPE shape) {
-        this.shape = shape;
     }
 
     public void setMinY(int value) {
@@ -223,10 +211,6 @@ public class WorldPlayer implements RTPWorld, RTPWorld_Defaulted {
     @Override
     public void setCooldown(long value) {
         this.cooldown = value;
-    }
-
-    public WorldPermissionGroup getConfig() {
-        return this.config;
     }
 
     public WORLD_TYPE getWorldtype() {

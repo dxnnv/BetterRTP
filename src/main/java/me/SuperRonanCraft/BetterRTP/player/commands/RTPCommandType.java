@@ -1,7 +1,9 @@
 package me.SuperRonanCraft.BetterRTP.player.commands;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.player.commands.types.*;
 
+@Getter
 public enum RTPCommandType {
     BIOME(new CmdBiome()),
     EDIT(new CmdEdit()),
@@ -32,11 +34,4 @@ public enum RTPCommandType {
         this.debugOnly = debugOnly;
     }
 
-    public boolean isDebugOnly() {
-        return debugOnly;
-    }
-
-    public RTPCommand getCmd() {
-        return cmd;
-    }
 }

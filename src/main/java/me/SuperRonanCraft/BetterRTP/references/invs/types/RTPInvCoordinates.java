@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.invs.types;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.references.invs.enums.RTPInventory;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.references.file.FileOther.FILETYPE;
@@ -40,17 +41,11 @@ public class RTPInvCoordinates extends RTPInventory {
     @Override
     public void clickEvent(InventoryClickEvent e) {
         int slot = e.getSlot();
-        for (RTP_COORDINATES_SETTINGS set : RTP_COORDINATES_SETTINGS.values()) {
-            
-        }
         for (RTP_INV_ITEMS type : RTP_INV_ITEMS.values()) {
             if (type.slot != -1) {
-                switch (type) {
-                    case BACK:
-                        if (slot == e.getInventory().getSize() - 9 + type.slot)
-                            BetterRTP.getInstance().getInvs().getInv(RTP_INV_SETTINGS.MAIN).show((Player) e.getWhoClicked());
-                    default:
-                        break;
+                if (type == RTP_INV_ITEMS.BACK) {
+                    if (slot == e.getInventory().getSize() - 9 + type.slot)
+                        BetterRTP.getInstance().getInvs().getInv(RTP_INV_SETTINGS.MAIN).show((Player) e.getWhoClicked());
                 }
             }
         }
@@ -72,10 +67,13 @@ enum RTP_COORDINATES_SETTINGS {
     TEMPLATE(   SETTINGS_TYPE.BOOLEAN, FILETYPE.CONFIG, "Template.Enabled",
             new Object[]{true, "Templates", "&7Toggle Templates system", "paper"});*/;
 
+    @Getter
     SETTINGS_TYPE type;
+    @Getter
     FILETYPE filetype;
     String path;
     String[] condition = null;
+    @Getter
     Object[] info; // = new Object[]{false}; //ENABLED, NAME, DESCRIPTION, ITEM
 
     RTP_COORDINATES_SETTINGS(SETTINGS_TYPE type, FILETYPE filetype, String path, Object[] info) {
@@ -97,8 +95,6 @@ enum RTP_COORDINATES_SETTINGS {
     void setValue(Object value) {
         BetterRTP.getInstance().getFiles().getType(filetype).setValue(path, value);
     }
-
-    public Object[] getInfo() {return info;}
 
     public Object getValue() {
         String path = this.path;
@@ -123,11 +119,4 @@ enum RTP_COORDINATES_SETTINGS {
         return null;
     }
 
-    public SETTINGS_TYPE getType() {
-        return type;
-    }
-
-    public FILETYPE getFiletype() {
-        return filetype;
-    }
 }

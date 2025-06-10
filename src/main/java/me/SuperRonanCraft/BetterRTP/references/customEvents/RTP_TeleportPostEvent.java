@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.customEvents;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.player.rtp.RTP_TYPE;
 import me.SuperRonanCraft.BetterRTP.references.rtpinfo.worlds.WorldPlayer;
 import org.bukkit.Location;
@@ -10,6 +11,7 @@ public class RTP_TeleportPostEvent extends RTPEvent {
     Player p;
     Location loc;
     Location oldLoc;
+    @Getter
     RTP_TYPE type;
     WorldPlayer wPlayer;
 
@@ -31,10 +33,6 @@ public class RTP_TeleportPostEvent extends RTPEvent {
 
     public Location getOldLocation() {
         return oldLoc;
-    }
-
-    public RTP_TYPE getType() {
-        return type;
     }
 
     public WorldPlayer getWorldPlayer() {

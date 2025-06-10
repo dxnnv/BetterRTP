@@ -27,7 +27,7 @@ public class DepPlaceholderAPI extends PlaceholderExpansion {
     @NotNull
     @Override
     public String getAuthor() {
-        return BetterRTP.getInstance().getDescription().getAuthors().get(0);
+        return BetterRTP.getInstance().getDescription().getAuthors().getFirst();
     }
 
     @NotNull
@@ -171,7 +171,7 @@ public class DepPlaceholderAPI extends PlaceholderExpansion {
 
     private World getWorld(String world_name) {
         World world = null;
-        if (world_name.length() > 0)
+        if (!world_name.isEmpty())
             for (World _world : Bukkit.getWorlds())
                 if (world_name.equalsIgnoreCase(_world.getName())) {
                     world = _world;

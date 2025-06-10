@@ -2,6 +2,7 @@ package me.SuperRonanCraft.BetterRTP.references.helpers;
 
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.references.settings.Settings;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -69,6 +70,24 @@ public class HelperDate {
             return settings.getPlaceholder_timeZero();
         if (max < 0L || min < 0L)
             return settings.getPlaceholder_timeInf();
+        LinkedList<String> lst = getDifferences(max, min, settings);
+
+        StringBuilder time_str = new StringBuilder();
+
+        for (int i = 0; i < lst.size(); i++) {
+            String str = lst.get(i);
+            if (lst.size() - i - 1 >= 2) {
+                str += settings.getPlaceholder_timeSeparator_middle();
+            } else if (lst.size() - 1 - i == 1) {
+                str += settings.getPlaceholder_timeSeparator_last();
+            }
+            time_str.append(str);
+        }
+
+        return time_str.toString();
+    }
+
+    private static @NotNull LinkedList<String> getDifferences(long max, long min, Settings settings) {
         long diffInMillies = max - min;
         long days, hours, minutes, seconds;
 
@@ -89,19 +108,7 @@ public class HelperDate {
             lst.add(settings.getPlaceholder_timeMinutes().replace("{0}", String.valueOf(minutes)));
         if (seconds > 0)
             lst.add(settings.getPlaceholder_timeSeconds().replace("{0}", String.valueOf(seconds)));
-
-        StringBuilder time_str = new StringBuilder();
-
-        for (int i = 0; i < lst.size(); i++) {
-            String str = lst.get(i);
-            if (lst.size() - i - 1 >= 2) {
-                str += settings.getPlaceholder_timeSeparator_middle();
-            } else if (lst.size() - 1 - i == 1) {
-                str += settings.getPlaceholder_timeSeparator_last();
-            }
-            time_str.append(str);
-        }
-
-        return time_str.toString();
+        return lst;
     }
+
 }

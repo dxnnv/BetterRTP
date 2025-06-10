@@ -1,5 +1,8 @@
 package me.SuperRonanCraft.BetterRTP.player.commands.types;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
 import me.SuperRonanCraft.BetterRTP.player.commands.RTPCommand;
 import me.SuperRonanCraft.BetterRTP.references.PermissionNode;
@@ -13,9 +16,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,29 +34,27 @@ public class CmdLogger implements RTPCommand {
 
     private void get(CommandSender sendi, String label, String[] args, boolean upload) {
         String cmd = "/" + label + " " + String.join(" ", args);
-        if (!upload) {
-            if (sendi instanceof Player) {
-                TextComponent component = new TextComponent(Message.color("&7- &7Click to upload log to &flogs.ronanplugins.com"));
-                component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, cmd + " _UPLOAD_"));
-                component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Message.color("&6Suggested command&f: &7" + "/betterrtp " + String.join(" ", args) + " _UPLOAD_")).create()));
-                ((Player) sendi).spigot().sendMessage(component);
-            } else {
-                sendi.sendMessage("Execute `" + cmd + " _UPLOAD_`" + " to upload log to https://logs.ronanplugins.com");
-            }
-        } else {
+        if (upload)  {
             CompletableFuture.runAsync(() -> {
                 String key = LogUploader.post(BetterRTP.getInstance().getRtpLogger().getFile());
                 if (key == null) {
                     Message.sms(sendi, new ArrayList<>(Collections.singletonList("&cAn error occured attempting to upload log!")), null);
                 } else {
                     try {
-                        JSONObject json = (JSONObject) new JSONParser().parse(key);
+                        JsonObject json = JsonParser.parseString(key).getAsJsonObject();
                         Message.sms(sendi, Arrays.asList(" ", Message.getPrefix(Message_RTP.msg) + "&aLog uploaded! &fView&7: &6https://logs.ronanplugins.com/" + json.get("key")), null);
-                    } catch (ParseException e) {
+                    } catch (JsonParseException e) {
                         throw new RuntimeException(e);
                     }
                 }
             });
+        } else if (sendi instanceof Player) {
+            TextComponent component = new TextComponent(Message.color("&7- &7Click to upload log to &flogs.ronanplugins.com"));
+            component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, cmd + " _UPLOAD_"));
+            component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(Message.color("&6Suggested command&f: &7" + "/betterrtp " + String.join(" ", args) + " _UPLOAD_")).create()));
+            ((Player) sendi).spigot().sendMessage(component);
+        } else {
+            sendi.sendMessage("Execute `" + cmd + " _UPLOAD_`" + " to upload log to https://logs.ronanplugins.com");
         }
     }
 

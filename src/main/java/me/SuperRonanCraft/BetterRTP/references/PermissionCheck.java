@@ -49,9 +49,10 @@ public interface PermissionCheck {
 
     String getNode();
 
+    @Getter
     class PermissionResult {
-        @Getter private final boolean passed;
-        @Getter private final String string;
+        private final boolean passed;
+        private final String string;
         PermissionResult(String string, boolean passed) {
             this.passed = passed;
             this.string = string;

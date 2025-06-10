@@ -2,6 +2,7 @@ package me.SuperRonanCraft.BetterRTP.references.rtpinfo;
 
 import io.papermc.lib.PaperLib;
 import me.SuperRonanCraft.BetterRTP.BetterRTP;
+import me.SuperRonanCraft.BetterRTP.player.rtp.RTP_SHAPE;
 import me.SuperRonanCraft.BetterRTP.references.rtpinfo.worlds.RTPWorld;
 import me.SuperRonanCraft.BetterRTP.references.rtpinfo.worlds.WORLD_TYPE;
 import org.bukkit.*;
@@ -15,13 +16,10 @@ import java.util.concurrent.CompletableFuture;
 public class RandomLocation {
 
     public static Location generateLocation(RTPWorld rtpWorld) {
-        Location loc;
-        switch (rtpWorld.getShape()) {
-            case CIRCLE: loc = generateRound(rtpWorld); break;
-            case SQUARE:
-            default: loc = generateSquare(rtpWorld); break;
-        }
-        return loc;
+        if (rtpWorld.getShape() == RTP_SHAPE.CIRCLE)
+            return  generateRound(rtpWorld);
+        else
+            return generateSquare(rtpWorld);
     }
 
     private static Location generateSquare(RTPWorld rtpWorld) {
@@ -31,24 +29,24 @@ public class RandomLocation {
         int x, z;
         int quadrant = new Random().nextInt(4);
         try {
-            switch (quadrant) {
-                case 0: // Positive X and Z
+            z = switch (quadrant) {
+                case 0 -> {
                     x = new Random().nextInt(max) + min;
-                    z = new Random().nextInt(max) + min;
-                    break;
-                case 1: // Negative X and Z
+                    yield new Random().nextInt(max) + min;
+                }
+                case 1 -> {
                     x = -new Random().nextInt(max) - min;
-                    z = -(new Random().nextInt(max) + min);
-                    break;
-                case 2: // Negative X and Positive Z
+                    yield -(new Random().nextInt(max) + min);
+                }
+                case 2 -> {
                     x = -new Random().nextInt(max) - min;
-                    z = new Random().nextInt(max) + min;
-                    break;
-                default: // Positive X and Negative Z
+                    yield new Random().nextInt(max) + min;
+                }
+                default -> {
                     x = new Random().nextInt(max) + min;
-                    z = -(new Random().nextInt(max) + min);
-                    break;
-            }
+                    yield -(new Random().nextInt(max) + min);
+                }
+            };
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             BetterRTP.getInstance().getLogger().warning("A bounding location was negative! Please check your config only has positive x/z for max/min radius!");
@@ -82,11 +80,10 @@ public class RandomLocation {
     }
 
     public static Location getSafeLocation(WORLD_TYPE type, World world, Location loc, int minY, int maxY, List<String> biomes) {
-        switch (type) { //Get a Y position and check for bad blocks
-            case NETHER: return getLocAtNether(loc.getBlockX(), loc.getBlockZ(), minY, maxY, world, biomes);
-            case NORMAL:
-            default: return getLocAtNormal(loc.getBlockX(), loc.getBlockZ(), minY, maxY, world, biomes);
-        }
+        if (type == WORLD_TYPE.NETHER) //Get a Y position and check for bad blocks
+            return getLocAtNether(loc.getBlockX(), loc.getBlockZ(), minY, maxY, world, biomes);
+        else
+            return getLocAtNormal(loc.getBlockX(), loc.getBlockZ(), minY, maxY, world, biomes);
     }
     private static Location getLocAtNormal(int x, int z, int minY, int maxY, World world, List<String> biomes) {
         Block b = getHighestBlock(x, z, world);
@@ -116,17 +113,17 @@ public class RandomLocation {
         //Max and Min Y
         for (int y = minY + 1; y < maxY/*world.getMaxHeight()*/; y++) {
             Block block_current = world.getBlockAt(x, y, z);
-            if (block_current.getType().name().endsWith("AIR") || !block_current.getType().isSolid()) {
-                if (!block_current.getType().name().endsWith("AIR") &&
-                        !block_current.getType().isSolid()) { //Block is not a solid (ex: lava, water...)
-                    String block_in = block_current.getType().name();
+            Material blockType = block_current.getType();
+            if (blockType.name().endsWith("AIR") || !blockType.isSolid()) {
+                if (!blockType.name().endsWith("AIR") && !blockType.isSolid()) { //Block is not a solid (ex: lava, water...)
+                    String block_in = blockType.name();
                     if (badBlock(block_in, x, z, world, null))
                         continue;
                 }
                 String block = world.getBlockAt(x, y - 1, z).getType().name();
                 if (block.endsWith("AIR")) //Block below is air, skip
                     continue;
-                if (world.getBlockAt(x, y + 1, z).getType().name().endsWith("AIR") //Head space
+                if (world.getBlockAt(x, y + 1, z).getType().name().endsWith("AIR") //Headspace
                         && !badBlock(block, x, z, world, biomes)) //Valid block
                     return new Location(world, x, y, z);
             }

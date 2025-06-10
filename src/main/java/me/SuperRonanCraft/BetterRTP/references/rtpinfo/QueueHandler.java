@@ -77,8 +77,6 @@ public class QueueHandler implements Listener { //Randomly queues up some safe l
             }
         }
 
-        //BetterRTP.getInstance().getLogger().info("Centerx " + rtpWorld.getCenterX());
-        //BetterRTP.getInstance().getLogger().info("Available: " + available.size());
         return available;
     }
 
@@ -86,10 +84,8 @@ public class QueueHandler implements Listener { //Randomly queues up some safe l
         if (!isEnabled()) return;
         AsyncHandler.async(() -> {
             //Delete all queue data async
-            if (DatabaseHandler.getQueue().removeLocation(loc)) {
-                //BetterRTP.getInstance().getQueue().queueList.remove(data);
+            if (DatabaseHandler.getQueue().removeLocation(loc))
                 BetterRTP.debug("-Removed a queue " + loc);
-            }
         });
     }
 

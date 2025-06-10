@@ -33,8 +33,7 @@ public class CmdLocation implements RTPCommand, RTPCommandHelpable {
     //rtp location <location name> [player]
     public void execute(CommandSender sendi, String label, String[] args) {
         if (args.length == 2) {
-            if (sendi instanceof Player) {
-                Player p = (Player) sendi;
+            if (sendi instanceof Player p) {
                 for (Map.Entry<String, RTPWorld> location : getLocations(sendi, p.getWorld()).entrySet())
                     if (location.getKey().equalsIgnoreCase(args[1].toLowerCase())) {
                         HelperRTP.tp(p, sendi, null, null, RTP_TYPE.COMMAND, false, false, (WorldLocation) location.getValue());

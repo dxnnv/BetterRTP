@@ -1,5 +1,6 @@
 package me.SuperRonanCraft.BetterRTP.references.customEvents;
 
+import lombok.Getter;
 import me.SuperRonanCraft.BetterRTP.player.rtp.RTPPlayer;
 import me.SuperRonanCraft.BetterRTP.references.rtpinfo.worlds.RTPWorld;
 import org.bukkit.Location;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public class RTP_FindLocationEvent extends RTPEvent implements Cancellable {
 
     Player p;
+    @Getter
     RTPWorld world;
     Location loc; //Used to force a location into find event
     int attempts;
@@ -31,10 +33,6 @@ public class RTP_FindLocationEvent extends RTPEvent implements Cancellable {
     @Nullable
     public Location getLocation() {
         return loc;
-    }
-
-    public RTPWorld getWorld() {
-        return world;
     }
 
     public Player getPlayer() {

@@ -62,11 +62,11 @@ public class RTPTeleport {
                     //Save respawn location if first join
                     if (type == RTP_TYPE.JOIN) //RTP Type was Join
                         if (BetterRTP.getInstance().getSettings().isRtpOnFirstJoin_SetAsRespawn()) //Save as respawn is enabled
-                            p.setBedSpawnLocation(loc, true); //True means to force a respawn even without a valid bed
+                            p.setRespawnLocation(loc, true); //True means to force a respawn even without a valid bed
                 }
             });
         } catch (Exception e) {
-            getPl().getPInfo().getRtping().remove(p); //No longer rtp'ing (errored)
+            getPl().getPInfo().getRtping().remove(p); //No longer rtp'ing (error)
             e.printStackTrace();
         }
     }

@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -77,7 +78,7 @@ public class BetterRTP extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sendi, Command cmd, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sendi, @NotNull Command cmd, @NotNull String label, String[] args) {
         try {
             this.cmd.commandExecuted(sendi, label, args);
         } catch (NullPointerException e) {
@@ -88,7 +89,7 @@ public class BetterRTP extends JavaPlugin {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
         return this.cmd.onTabComplete(sender, args);
     }
 

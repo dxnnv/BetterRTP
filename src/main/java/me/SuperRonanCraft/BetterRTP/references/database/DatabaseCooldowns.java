@@ -69,7 +69,7 @@ public class DatabaseCooldowns extends SQLite {
                 world.getName(),
                 COLUMNS.UUID.name
         );
-        List<Object> params = new ArrayList<Object>() {{
+        List<Object> params = new ArrayList<>() {{
             add(uuid.toString());
         }};
         sqlUpdate(sql, params);
@@ -111,10 +111,10 @@ public class DatabaseCooldowns extends SQLite {
                 + COLUMNS.COOLDOWN_DATE.name + " "
                 //+ COLUMNS.USES.name + " "
                 + ") VALUES(?, ?)";
-        List<Object> params = new ArrayList<Object>() {{
-                add(data.getUuid().toString());
-                add(data.getTime());
-                //add(data.getUses());
+        List<Object> params = new ArrayList<>() {{
+            add(data.getUuid().toString());
+            add(data.getTime());
+            //add(data.getUses());
         }};
         sqlUpdate(sql, params);
     }

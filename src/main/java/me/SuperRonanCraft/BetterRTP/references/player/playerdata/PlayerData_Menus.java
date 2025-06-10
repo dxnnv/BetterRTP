@@ -6,11 +6,13 @@ import me.SuperRonanCraft.BetterRTP.references.invs.RTP_INV_SETTINGS;
 import org.bukkit.World;
 import org.bukkit.inventory.Inventory;
 
+@Setter
+@Getter
 public class PlayerData_Menus {
 
-    @Getter @Setter private Inventory inv;
-    @Getter @Setter RTP_INV_SETTINGS invType;
-    @Getter @Setter World invWorld;
-    @Getter @Setter RTP_INV_SETTINGS invNextInv;
+    private Inventory inv;
+    RTP_INV_SETTINGS invType;
+    World invWorld;
+    RTP_INV_SETTINGS invNextInv;
 
 }

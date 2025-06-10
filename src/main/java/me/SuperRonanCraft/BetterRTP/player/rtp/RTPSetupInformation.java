@@ -11,16 +11,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Getter
 public class RTPSetupInformation {
     //Will provide information to setup an RTP attempt
-    @Getter @Setter private World world;
-    @Getter @NonNull private final CommandSender sender;
-    @Getter @Nullable private final Player player;
-    @Getter private final boolean personalized;
-    @Getter @Setter @Nullable private List<String> biomes;
-    @Getter @Setter @Nullable private WorldLocation location;
-    @Getter @Nullable private final RTP_TYPE rtp_type;
-    @Getter private final RTP_PlayerInfo playerInfo;
+    @Setter private World world;
+    @NonNull private final CommandSender sender;
+    @Nullable private final Player player;
+    private final boolean personalized;
+    @Setter @Nullable private List<String> biomes;
+    @Setter @Nullable private WorldLocation location;
+    @Nullable private final RTP_TYPE rtp_type;
+    private final RTP_PlayerInfo playerInfo;
 
     public RTPSetupInformation(@Nullable World world,
                                @NonNull CommandSender sender,

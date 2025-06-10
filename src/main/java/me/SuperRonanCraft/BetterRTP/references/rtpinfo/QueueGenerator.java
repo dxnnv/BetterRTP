@@ -143,14 +143,12 @@ public class QueueGenerator {
     }
 
     private static String getId(RTP_SETUP_TYPE type, String id) {
-        switch (type) {
-            case CUSTOM_WORLD: return "custom_" + id;
-            case LOCATION: return "location_" + id;
-            case DEFAULT: return "default_" + id;
-            default:
-                break;
-        }
-        return "unknown_" + id;
+        return switch (type) {
+            case CUSTOM_WORLD -> "custom_" + id;
+            case LOCATION -> "location_" + id;
+            case DEFAULT -> "default_" + id;
+            default -> "unknown_" + id;
+        };
     }
 
     private void addQueue(RTPWorld rtpWorld, String id, ReQueueData reQueueData) {

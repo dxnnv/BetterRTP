@@ -23,8 +23,7 @@ public class DepPerms {
                 p = permissionProvider.getProvider();
             } else
                 p = null;
-        } catch (NullPointerException e) {
-            //Vault but no Perms
+        } catch (NullPointerException ignored) {
         }
     }
 }

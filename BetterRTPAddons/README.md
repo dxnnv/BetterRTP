@@ -1,4 +1,4 @@
-<p align="center">
+<p>
   <b><a>Welcome to BetterRTPAddons's repository!</a></b>
 </p>
 
@@ -17,7 +17,7 @@ BetterRTPAddons uses and is compiled with the following libraries:
 ## Where's the Wiki?  
 The wiki is available [here](../../../wiki)!
     
-<p align="center">
+<p>
   <b>Chat with us on Discord</b><br/>
   <a href="https://discord.gg/8Kt4wKm"><img src="https://img.shields.io/discord/182633513474850818.svg?longCache=true&style=flat-square&label=Discord" alt="Discord" /></a><br/>
   <b>Have a Suggestion? Make an issue!</b><br/>

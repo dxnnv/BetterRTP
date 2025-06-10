@@ -1,15 +1,17 @@
 package me.SuperRonanCraft.BetterRTP.references.invs;
 
+import java.io.Serializable;
+
 public enum SETTINGS_TYPE {
     BOOLEAN(Boolean.class), STRING(String.class), INTEGER(Integer.class);
 
-    private java.io.Serializable type;
+    private Serializable type;
 
-    SETTINGS_TYPE(java.io.Serializable type) {
+    SETTINGS_TYPE(Serializable type) {
         this.type = type;
     }
 
-    java.io.Serializable getType() {
+    Serializable getType() {
         return type;
     }
 }

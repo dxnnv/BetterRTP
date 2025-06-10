@@ -43,14 +43,14 @@ public class DatabaseChunkData extends SQLite {
     public void addChunk(Chunk chunk, int maxy, Biome biome) {
         AsyncHandler.async(() -> {
             String pre = "INSERT OR REPLACE INTO ";
-            String sql = pre + tables.get(0) + " ("
+            String sql = pre + tables.getFirst() + " ("
                     + COLUMNS.WORLD.name + ", "
                     + COLUMNS.X.name + ", "
                     + COLUMNS.Z.name + ", "
                     + COLUMNS.BIOME.name + ", "
                     + COLUMNS.MAX_Y.name + " "
                     + ") VALUES(?, ?, ?, ?, ?)";
-            List<Object> params = new ArrayList<Object>() {{
+            List<Object> params = new ArrayList<>() {{
                 add(chunk.getWorld().getName());
                 add(chunk.getX());
                 add(chunk.getZ());

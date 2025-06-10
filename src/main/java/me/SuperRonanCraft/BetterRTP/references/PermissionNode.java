@@ -2,6 +2,7 @@ package me.SuperRonanCraft.BetterRTP.references;
 
 import lombok.Getter;
 
+@Getter
 public enum PermissionNode implements PermissionCheck {
 
     ADMIN("admin"),
@@ -25,7 +26,7 @@ public enum PermissionNode implements PermissionCheck {
     DEVELOPER("DEVELOPER_PERM"),
     ;
 
-    @Getter private final String node;
+    private final String node;
 
     PermissionNode(String node) {
         this.node = PermissionCheck.getPrefix() + node;

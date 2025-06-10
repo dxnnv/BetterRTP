@@ -5,11 +5,12 @@ import org.bukkit.Location;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter
 public class QueueData {
 
-    @Getter final int database_id;
-    @Getter @Setter Location location;
-    @Getter final long generated;
+    final int database_id;
+    @Setter Location location;
+    final long generated;
 
     public QueueData(Location location, long generated, int database_id) {
         this.location = location;

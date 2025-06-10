@@ -47,7 +47,7 @@ public class DatabasePlayers extends SQLite {
         ResultSet rs = null;
         try {
             conn = getSQLConnection();
-            ps = conn.prepareStatement("SELECT * FROM " + tables.get(0) + " WHERE " + COLUMNS.UUID.name + " = ?");
+            ps = conn.prepareStatement("SELECT * FROM " + tables.getFirst() + " WHERE " + COLUMNS.UUID.name + " = ?");
             ps.setString(1, data.player.getUniqueId().toString());
 
             rs = ps.executeQuery();
@@ -67,17 +67,17 @@ public class DatabasePlayers extends SQLite {
     //Set a player Cooldown
     public void setData(PlayerData data) {
         String pre = "INSERT OR REPLACE INTO ";
-        String sql = pre + tables.get(0) + " ("
+        String sql = pre + tables.getFirst() + " ("
                 + COLUMNS.UUID.name + ", "
                 + COLUMNS.COUNT.name + ", "
                 + COLUMNS.LAST_COOLDOWN_DATE.name + " "
                 //+ COLUMNS.USES.name + " "
                 + ") VALUES(?, ?, ?)";
-        List<Object> params = new ArrayList<Object>() {{
-                add(data.player.getUniqueId().toString());
-                add(data.getRtpCount());
-                add(data.getGlobalCooldown());
-                //add(data.getUses());
+        List<Object> params = new ArrayList<>() {{
+            add(data.player.getUniqueId().toString());
+            add(data.getRtpCount());
+            add(data.getGlobalCooldown());
+            //add(data.getUses());
         }};
         sqlUpdate(sql, params);
     }

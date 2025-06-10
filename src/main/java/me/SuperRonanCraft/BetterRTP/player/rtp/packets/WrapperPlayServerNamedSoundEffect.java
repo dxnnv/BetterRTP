@@ -216,7 +216,7 @@ public class WrapperPlayServerNamedSoundEffect extends AbstractPacket {
 
     /**
      * Retrieve the sound name.
-     * @see {@link NamedSoundEffects}.
+     * @see NamedSoundEffects
      * @return The current Sound name
      */
     public String getSoundName() {
@@ -225,7 +225,7 @@ public class WrapperPlayServerNamedSoundEffect extends AbstractPacket {
 
     /**
      * Set the sound name.
-     * @see {@link NamedSoundEffects}.
+     * @see NamedSoundEffects
      * @param value - new value.
      */
     public void setSoundName(String value) {

@@ -23,8 +23,7 @@ public class CmdTest implements RTPCommand, RTPCommandHelpable {
 
     @Override
     public void execute(CommandSender sendi, String label, String[] args) {
-        if (sendi instanceof Player) {
-            Player p = (Player) sendi;
+        if (sendi instanceof Player p) {
             BetterRTP.getInstance().getRTP().getTeleport().afterTeleport(p, p.getLocation(),
                     HelperRTP.getPlayerWorld(new RTPSetupInformation(p.getWorld(), p, p, false)), 0, p.getLocation(), RTP_TYPE.TEST);
         } else
